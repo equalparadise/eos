@@ -98,8 +98,11 @@ export FULL_TAG="eosio/ci:$HASHED_IMAGE_TAG"
 if [[ $TRAVIS == true ]]; then
   sed -i -e 's/^HOME=\/Users\/anka/HOME=\/Users\/travis/g' /tmp/$POPULATED_FILE_NAME
   sed -i -e 's/&& brew install git//g' /tmp/$POPULATED_FILE_NAME
+  COMMIT_ID=$TRAVIS_COMMIT
+else
+  COMMIT_ID=$BUILDKITE_COMMIT
 fi
-sed -i -e "s/eos.git \$EOS_LOCATION/eos.git \$EOS_LOCATION \&\& cd \$EOS_LOCATION \&\& git pull \&\& git checkout -f $BUILDKITE_COMMIT/g" /tmp/$POPULATED_FILE_NAME # MUST BE AFTER WE GENERATE THE HASH
+sed -i -e "s/eos.git \$EOS_LOCATION/eos.git \$EOS_LOCATION \&\& cd \$EOS_LOCATION \&\& git pull \&\& git checkout -f $COMMIT_ID/g" /tmp/$POPULATED_FILE_NAME # MUST BE AFTER WE GENERATE THE HASH
 chmod +x /tmp/$POPULATED_FILE_NAME
 [[ $DEBUG == true ]] && cat /tmp/$POPULATED_FILE_NAME
 if [[ $ONLYHASH == true ]]; then
