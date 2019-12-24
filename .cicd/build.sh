@@ -4,10 +4,10 @@ set -eo pipefail
 echo '+++ Executed Build Script'
 export DOCKERIZATION=false
 [[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD'
-[[ $TRAVIS == true ]] && mkdir -p ~/eosio && cd ../.. && mv EOSIO/eos ~/eosio/ && cd ~/eosio/eos # Move the cloned travis directory to ~/eosio/eos, allowing us to skip a second clone
 if [[ "$(uname)" == 'Darwin' ]]; then
     # You can't use chained commands in execute
     if [[ $TRAVIS == true ]]; then
+        mkdir -p ~/eosio && cd ../.. && mv EOSIO/eos ~/eosio/ && cd ~/eosio/eos
         ccache -s
         brew link --overwrite md5sha1sum
         brew reinstall openssl@1.1 # Fixes issue where builds in Travis cannot find libcrypto.
