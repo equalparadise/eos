@@ -26,7 +26,7 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     . /tmp/$POPULATED_FILE_NAME # This file is populated from the platform's build documentation code block
     cd $EOS_LOCATION
 else # Linux
-    ARGS=${ARGS:-"--rm --init $(buildkite-intrinsics) -e JOBS"} # We must mount $(pwd) in as itself to avoid https://stackoverflow.com/questions/31381322/docker-in-docker-cannot-mount-volume
+    ARGS=${ARGS:-"--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"} # We must mount $(pwd) in as itself to avoid https://stackoverflow.com/questions/31381322/docker-in-docker-cannot-mount-volume
     if [[ $TRAVIS == true ]]; then
         ARGS="$ARGS -v /usr/lib/ccache -v $HOME/.ccache:/opt/.ccache -e TRAVIS -e CCACHE_DIR=/opt/.ccache"
         [[ ! $IMAGE_TAG =~ 'unpinned' ]] && sed -i -e 's/^cmake /cmake -DCMAKE_CXX_COMPILER_LAUNCHER=ccache /g' /tmp/$POPULATED_FILE_NAME
@@ -47,11 +47,9 @@ else # Linux
         fi
         BUILD_COMMANDS="ccache -s && $PRE_COMMANDS && "
     else
-        ARGS="$ARGS -v $(pwd):$(pwd)"
-        BUILD_COMMANDS="cd $(pwd) && "
         echo "mv \$EOSIO_BUILD_LOCATION $(pwd)/build" >> /tmp/$POPULATED_FILE_NAME
     fi
-    BUILD_COMMANDS="$BUILD_COMMANDS./$POPULATED_FILE_NAME"
+    BUILD_COMMANDS="cd $(pwd) && $BUILD_COMMANDS./$POPULATED_FILE_NAME"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
