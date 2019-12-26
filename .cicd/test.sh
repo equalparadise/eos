@@ -25,7 +25,8 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
 else # Linux
     ARGS="--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # Obtain the hash from the populated template 
-    [[ $TRAVIS != true ]] && TEST_COMMANDS="cd $(pwd) && tar -xzf build.tar.gz &&"
+    TEST_COMMANDS="cd $(pwd) &&"
+    [[ $TRAVIS != true ]] && TEST_COMMANDS="$TEST_COMMANDS tar -xzf build.tar.gz &&"
     TEST_COMMANDS="$TEST_COMMANDS export PATH=\$PATH:/root/eosio/install/bin && $@"
     echo "$ docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\""
     set +e # defer error handling to end
