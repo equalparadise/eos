@@ -1,13 +1,12 @@
 #!/bin/bash
 set -eo pipefail
 . ./.cicd/helpers/general.sh
-echo '+++ Executed Build Script'
+echo '+++ Build Script Started'
 export DOCKERIZATION=false
 [[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD'
 if [[ "$(uname)" == 'Darwin' ]]; then
     # You can't use chained commands in execute
     if [[ $TRAVIS == true ]]; then
-        mkdir -p ~/eosio && cd ../.. && mv EOSIO/eos ~/eosio/ && cd ~/eosio/eos
         ccache -s
         brew link --overwrite md5sha1sum
         brew reinstall openssl@1.1 # Fixes issue where builds in Travis cannot find libcrypto.
@@ -24,7 +23,6 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     . /tmp/$POPULATED_FILE_NAME # This file is populated from the platform's build documentation code block
-    cd $EOS_LOCATION
 else # Linux
     ARGS=${ARGS:-"--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"} # We must mount $(pwd) in as itself to avoid https://stackoverflow.com/questions/31381322/docker-in-docker-cannot-mount-volume
     if [[ $TRAVIS == true ]]; then
@@ -57,5 +55,9 @@ else # Linux
     eval docker run $ARGS $FULL_TAG bash -c \"$BUILD_COMMANDS\"
 fi
 
-[[ $TRAVIS != true ]] && tar -pczf build.tar.gz build && buildkite-agent artifact upload build.tar.gz
+if [[ $TRAVIS != true ]]; then
+    [[ $(uname) == 'Darwin' ]] && cd $EOS_LOCATION
+    tar -pczf build.tar.gz build && buildkite-agent artifact upload build.tar.gz
+fi
 
+echo '+++ Build Script Finished'
