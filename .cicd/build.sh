@@ -43,11 +43,10 @@ else # Linux
         elif [[ $IMAGE_TAG == 'ubuntu-18.04-unpinned' ]]; then
             PRE_COMMANDS="export PATH=/usr/lib/ccache:\\\$PATH"
         fi
-        BUILD_COMMANDS="ccache -s && $PRE_COMMANDS && "
-    else
-        echo "mv \$EOSIO_BUILD_LOCATION $(pwd)/build" >> /tmp/$POPULATED_FILE_NAME
+        BUILD_COMMANDS="ccache -s && $PRE_COMMANDS && " 
     fi
     BUILD_COMMANDS="cd $(pwd) && $BUILD_COMMANDS./$POPULATED_FILE_NAME"
+    echo "mv \$EOSIO_BUILD_LOCATION $(pwd)/build" >> /tmp/$POPULATED_FILE_NAME
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
