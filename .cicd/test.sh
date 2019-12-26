@@ -3,9 +3,9 @@ set -eo pipefail
 
 # variables
 . ./.cicd/helpers/general.sh
-# tests
 export DOCKERIZATION=false
 
+# tests
 [[ $TRAVIS != true ]] && buildkite-agent artifact download build.tar.gz . --step "$PLATFORM_FULL_NAME - Build"
 
 if [[ $(uname) == 'Darwin' ]]; then # macOS
