@@ -29,7 +29,7 @@ else # Linux
     TEST_COMMANDS="$TEST_COMMANDS export PATH=\$PATH:/root/eosio/install/bin && $@"
     echo "$ docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\""
     set +e # defer error handling to end
-    eval docker run -$ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\"
+    eval docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\"
     EXIT_STATUS=$?
 fi
 # buildkite
