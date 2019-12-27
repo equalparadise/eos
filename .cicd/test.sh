@@ -16,7 +16,7 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
         nvm install --lts=dubnium
     else
         tar -xzf build.tar.gz
-        export PATH=$PATH:$(cat $CICD_DIR/docs/$IMAGE_TAG.md | grep EOSIO_INSTALL_LOCATION= |  cut -d\" -f2)/bin
+        export PATH=$PATH:/Users/anka/eosio/install/bin
         source ~/.bash_profile # Make sure node is available for ship_test
     fi
     set +e # defer error handling to end
@@ -25,7 +25,7 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
 else # Linux
     ARGS="--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # Obtain the hash from the populated template 
-    TEST_COMMANDS="cp -rfp $(pwd) /root/eosio/eos && cd /root/eosio/eos &&"
+    TEST_COMMANDS="cd $(pwd) &&"
     [[ $TRAVIS != true ]] && TEST_COMMANDS="$TEST_COMMANDS tar -xzf build.tar.gz &&"
     TEST_COMMANDS="$TEST_COMMANDS export PATH=\$PATH:/root/eosio/install/bin && $@"
     echo "$ docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\""
