@@ -17,8 +17,10 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
         . "/usr/local/opt/nvm/nvm.sh"
         nvm install --lts=dubnium
     else
+        . /tmp/$POPULATED_FILE_NAME
+        cp -rfp $(pwd) $EOS_LOCATION
+        cd $EOS_LOCATION
         tar -xzf build.tar.gz
-        export PATH=$PATH:/Users/anka/eosio/install/bin
         source ~/.bash_profile # Make sure node is available for ship_test
     fi
     set +e # defer error handling to end
