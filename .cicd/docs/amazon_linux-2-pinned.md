@@ -25,15 +25,20 @@ Select a task below, then copy/paste the shell commands to a Unix terminal to ex
 [[info | Building EOSIO on another OS?]]
 | Visit the [Build EOSIO from Source](../../index.md) section.
 
-## Download EOSIO Repository
-These commands set the EOSIO directories, install git, and clone the EOSIO repository.
-<!-- DAC CLONE -->
+## Set EOSIO Environment Variables
+<!-- DAC ENV -->
 ```sh
-# set EOSIO directories
 export EOSIO_LOCATION=$HOME/eosio
 export EOS_LOCATION=$EOSIO_LOCATION/eos
 export EOSIO_INSTALL_LOCATION=$EOSIO_LOCATION/install
 export PATH=$EOSIO_INSTALL_LOCATION/bin:$PATH
+```
+<!-- DAC ENV END -->
+## Download EOSIO Repository
+These commands set the EOSIO directories, install git, and clone the EOSIO repository.
+<!-- DAC CLONE -->
+```sh
+# create EOSIO directories
 mkdir -p $EOSIO_INSTALL_LOCATION
 # install git
 yum update -y && yum install -y git

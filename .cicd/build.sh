@@ -3,7 +3,7 @@ set -eo pipefail
 . ./.cicd/helpers/general.sh
 echo '+++ Build Script Started'
 export DOCKERIZATION=false
-[[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD'
+[[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC ENV' '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC ENV' '<!-- DAC CLONE' '<!-- DAC BUILD'
 if [[ "$(uname)" == 'Darwin' ]]; then
     # You can't use chained commands in execute
     if [[ $TRAVIS == true ]]; then
@@ -44,10 +44,10 @@ else # Linux
         elif [[ $IMAGE_TAG == 'ubuntu-18.04-unpinned' ]]; then
             PRE_COMMANDS="export PATH=/usr/lib/ccache:\\\$PATH"
         fi
-        BUILD_COMMANDS="ccache -s && $PRE_COMMANDS && "
+        BUILD_COMMANDS="ccache -s && $PRE_COMMANDS &&"
     fi
     echo "cp -rfp \$EOS_LOCATION/build $(pwd)" >> /tmp/$POPULATED_FILE_NAME
-    BUILD_COMMANDS="$BUILD_COMMANDS./$POPULATED_FILE_NAME"
+    BUILD_COMMANDS="$BUILD_COMMANDS ./$POPULATED_FILE_NAME"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME

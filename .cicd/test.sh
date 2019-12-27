@@ -8,6 +8,8 @@ export DOCKERIZATION=false
 # tests
 [[ $TRAVIS != true ]] && buildkite-agent artifact download build.tar.gz . --step "$PLATFORM_FULL_NAME - Build"
 
+. ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC ENV'
+
 if [[ $(uname) == 'Darwin' ]]; then # macOS
     if [[ $TRAVIS == true ]]; then
         # Support ship_test
@@ -25,9 +27,14 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
 else # Linux
     ARGS="--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # Obtain the hash from the populated template 
-    TEST_COMMANDS="cp -rfp $(pwd) /root/eosio/eos && cd /root/eosio/eos"
+    TEST_COMMANDS="cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION"
     [[ $TRAVIS != true ]] && TEST_COMMANDS="$TEST_COMMANDS tar -xzf build.tar.gz &&"
-    TEST_COMMANDS="$TEST_COMMANDS export PATH=\$PATH:/root/eosio/install/bin && $@ && cp -rfp /root/eosio/eos/build $(pwd)"
+    echo "cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION" /tmp/$POPULATED_FILE_NAME # We don't need to clone twice
+    echo "$@" >> /tmp/$POPULATED_FILE_NAME
+    echo "cp -rfp \$EOS_LOCATION/build $(pwd)" >> /tmp/$POPULATED_FILE_NAME
+    TEST_COMMANDS="$TEST_COMMANDS ./$POPULATED_FILE_NAME"
+    cat /tmp/$POPULATED_FILE_NAME
+    mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
     echo "$ docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\""
     set +e # defer error handling to end
     eval docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\"
