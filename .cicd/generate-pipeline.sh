@@ -102,6 +102,9 @@ echo $PLATFORMS_JSON_ARRAY | jq -cr '.[]' | while read -r PLATFORM_JSON; do
     command:
       - "./.cicd/generate-base-images.sh"
       - "./.cicd/build.sh"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -162,6 +165,9 @@ cat <<EOF
 
   - label: ":docker: Docker - Build and Install"
     command: "./.cicd/installation-build.sh"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-18.04-unpinned"
       PLATFORM_TYPE: "unpinned"
@@ -190,6 +196,9 @@ for ROUND in $(seq 1 $ROUNDS); do
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - Unit Tests"
     command:
       - "./.cicd/test.sh scripts/parallel-test.sh"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -256,6 +265,9 @@ EOF
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - WASM Spec Tests"
     command:
       - "./.cicd/test.sh scripts/wasm-spec-test.sh"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -324,6 +336,9 @@ EOF
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - $TEST_NAME"
     command:
       - "./.cicd/test.sh scripts/serial-test.sh $TEST_NAME"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -393,6 +408,9 @@ EOF
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - $TEST_NAME"
     command:
       - "./.cicd/test.sh scripts/long-running-test.sh $TEST_NAME"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -550,7 +568,7 @@ cat <<EOF
       - "./.cicd/package.sh"
     plugins:
       - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "centos-7.7-$PLATFORM_TYPE"
       PLATFORM_FULL_NAME: ":centos: CentOS 7.7"
@@ -566,7 +584,7 @@ cat <<EOF
       - "./.cicd/package.sh"
     plugins:
       - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-16.04-$PLATFORM_TYPE"
       PLATFORM_FULL_NAME: ":ubuntu: Ubuntu 16.04"
@@ -582,7 +600,7 @@ cat <<EOF
       - "./.cicd/package.sh"
     plugins:
       - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
+          pattern: "$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-18.04-$PLATFORM_TYPE"
       PLATFORM_FULL_NAME: ":ubuntu: Ubuntu 18.04"
