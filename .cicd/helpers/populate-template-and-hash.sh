@@ -101,12 +101,8 @@ if [[ $TRAVIS == true ]]; then
 else
   COMMIT_ID=$BUILDKITE_COMMIT
 fi
-PWD_BASENAME=$(basename $(pwd))
-sed -i -e "s?EOSIO_LOCATION=.*?EOSIO_LOCATION=$(pwd)/..?g" /tmp/$POPULATED_FILE_NAME
-sed -i -e "s?EOS_LOCATION=.*?EOS_LOCATION=\$EOSIO_LOCATION/$PWD_BASENAME?g" /tmp/$POPULATED_FILE_NAME
-sed -i -e "s?EOSIO_INSTALL_LOCATION=.*?EOSIO_INSTALL_LOCATION=\$HOME/eosio/install?g" /tmp/$POPULATED_FILE_NAME
 sed -i -e 's/&& brew install git/&& brew install git || true/g' /tmp/$POPULATED_FILE_NAME
-sed -i -e '/git clone https:\/\/github.com\/EOSIO\/eos.git/d' /tmp/$POPULATED_FILE_NAME # Avoid cloning a second time
+sed -i -e "s/eos.git \$EOS_LOCATION/eos.git \$EOS_LOCATION \&\& cd \$EOS_LOCATION \&\& git pull \&\& git checkout -f $COMMIT_ID/g" /tmp/$POPULATED_FILE_NAME # MUST BE AFTER WE GENERATE THE HASH
 chmod +x /tmp/$POPULATED_FILE_NAME
 [[ $DEBUG == true ]] && cat /tmp/$POPULATED_FILE_NAME
 if [[ $ONLYHASH == true ]]; then
