@@ -4,6 +4,7 @@ set -eo pipefail
 echo '+++ Build Script Started'
 export DOCKERIZATION=false
 [[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD'
+sed -i '/git clone https://github.com/EOSIO/eos.git/d' /tmp/$POPULATED_FILE_NAME # We don't need to clone twice
 if [[ "$(uname)" == 'Darwin' ]]; then
     # You can't use chained commands in execute
     if [[ $TRAVIS == true ]]; then
@@ -45,7 +46,11 @@ else # Linux
         fi
         BUILD_COMMANDS="ccache -s && $PRE_COMMANDS && "
     fi
-    BUILD_COMMANDS="cd $(pwd) && $BUILD_COMMANDS./$POPULATED_FILE_NAME"
+    sed -i "/export EOS_LOCATION/a \\
+    cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION \\
+    " /tmp/$POPULATED_FILE_NAME
+    echo "cp -rfp \$EOS_LOCATION/build $(pwd)" >> /tmp/$POPULATED_FILE_NAME
+    BUILD_COMMANDS="$BUILD_COMMANDS./$POPULATED_FILE_NAME"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
