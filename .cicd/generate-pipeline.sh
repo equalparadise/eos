@@ -107,9 +107,6 @@ echo $PLATFORMS_JSON_ARRAY | jq -cr '.[]' | while read -r PLATFORM_JSON; do
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
     agents:
       queue: "$BUILDKITE_BUILD_AGENT_QUEUE"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     timeout: ${TIMEOUT:-180}
     skip: \${SKIP_$(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_UPCASE)_$(echo "$PLATFORM_JSON" | jq -r .VERSION_MAJOR)$(echo "$PLATFORM_JSON" | jq -r .VERSION_MINOR)}${SKIP_BUILD}
 
@@ -170,9 +167,6 @@ cat <<EOF
       PLATFORM_TYPE: "unpinned"
     agents:
       queue: "$BUILDKITE_BUILD_AGENT_QUEUE"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     timeout: ${TIMEOUT:-180}
     skip: ${SKIP_INSTALL}${SKIP_LINUX}${SKIP_DOCKER}
 
@@ -201,9 +195,6 @@ for ROUND in $(seq 1 $ROUNDS); do
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
     agents:
       queue: "$BUILDKITE_BUILD_AGENT_QUEUE"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     retry:
       manual:
         permit_on_passed: true
@@ -270,9 +261,6 @@ EOF
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
     agents:
       queue: "$BUILDKITE_BUILD_AGENT_QUEUE"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     retry:
       manual:
         permit_on_passed: true
@@ -336,9 +324,6 @@ EOF
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - $TEST_NAME"
     command:
       - "./.cicd/test.sh scripts/serial-test.sh $TEST_NAME"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
@@ -408,9 +393,6 @@ EOF
   - label: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL) - $TEST_NAME"
     command:
       - "./.cicd/test.sh scripts/long-running-test.sh $TEST_NAME"
-    plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "EOSIO/eosio?EOSIO/eos"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
