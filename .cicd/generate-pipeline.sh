@@ -103,7 +103,7 @@ echo $PLATFORMS_JSON_ARRAY | jq -cr '.[]' | while read -r PLATFORM_JSON; do
       - "./.cicd/generate-base-images.sh"
       - "./.cicd/build.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
@@ -166,7 +166,7 @@ cat <<EOF
   - label: ":docker: Docker - Build and Install"
     command: "./.cicd/installation-build.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-18.04-unpinned"
@@ -197,7 +197,7 @@ for ROUND in $(seq 1 $ROUNDS); do
     command:
       - "./.cicd/test.sh scripts/parallel-test.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
@@ -266,7 +266,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/wasm-spec-test.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
@@ -337,7 +337,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/serial-test.sh $TEST_NAME"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
@@ -409,7 +409,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/long-running-test.sh $TEST_NAME"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
@@ -567,7 +567,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "centos-7.7-$PLATFORM_TYPE"
@@ -583,7 +583,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-16.04-$PLATFORM_TYPE"
@@ -599,7 +599,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.1:
+      - NorseGaud/modify-checkout-path#v0.0.2:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: "ubuntu-18.04-$PLATFORM_TYPE"
