@@ -103,7 +103,7 @@ echo $PLATFORMS_JSON_ARRAY | jq -cr '.[]' | while read -r PLATFORM_JSON; do
       - "./.cicd/generate-base-images.sh"
       - "./.cicd/build.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -167,7 +167,7 @@ cat <<EOF
   - label: ":docker: Docker - Build and Install"
     command: "./.cicd/installation-build.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -199,7 +199,7 @@ for ROUND in $(seq 1 $ROUNDS); do
     command:
       - "./.cicd/test.sh scripts/parallel-test.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -269,7 +269,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/wasm-spec-test.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -341,7 +341,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/serial-test.sh $TEST_NAME"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -414,7 +414,7 @@ EOF
     command:
       - "./.cicd/test.sh scripts/long-running-test.sh $TEST_NAME"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -573,7 +573,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -590,7 +590,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
@@ -607,7 +607,7 @@ cat <<EOF
     command:
       - "./.cicd/package.sh"
     plugins:
-      - NorseGaud/modify-checkout-path#v0.0.3:
+      - NorseGaud/modify-checkout-path#v0.0.4:
           pattern: "\$\${BUILDKITE_AGENT_NAME}?$BUILDKITE_BUILD_ID"
           cleanup: true
     env:
