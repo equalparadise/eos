@@ -104,7 +104,7 @@ echo $PLATFORMS_JSON_ARRAY | jq -cr '.[]' | while read -r PLATFORM_JSON; do
       - "./.cicd/build.sh"
     plugins:
       - NorseGaud/modify-checkout-path#v0.0.1:
-          pattern: "\$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
+          pattern: "$$BUILDKITE_AGENT_NAME?$BUILDKITE_BUILD_ID"
     env:
       IMAGE_TAG: $(echo "$PLATFORM_JSON" | jq -r .FILE_NAME)
       PLATFORM_FULL_NAME: "$(echo "$PLATFORM_JSON" | jq -r .ICON) $(echo "$PLATFORM_JSON" | jq -r .PLATFORM_NAME_FULL)"
