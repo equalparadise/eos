@@ -47,7 +47,7 @@ else # Linux
         BUILD_COMMANDS="ccache -s && $PRE_COMMANDS &&"
     fi
     echo "cp -rfp \$EOS_LOCATION/build $(pwd)" >> /tmp/$POPULATED_FILE_NAME
-    BUILD_COMMANDS="$BUILD_COMMANDS ./$POPULATED_FILE_NAME"
+    BUILD_COMMANDS="cd $(pwd) && ./$POPULATED_FILE_NAME"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # obtain $FULL_TAG (and don't overwrite existing file)
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME

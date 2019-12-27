@@ -27,12 +27,11 @@ if [[ $(uname) == 'Darwin' ]]; then # macOS
 else # Linux
     ARGS="--rm --init -v $(pwd):$(pwd) $(buildkite-intrinsics) -e JOBS"
     . $HELPERS_DIR/populate-template-and-hash.sh -h # Obtain the hash from the populated template 
-    TEST_COMMANDS="cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION"
-    [[ $TRAVIS != true ]] && TEST_COMMANDS="$TEST_COMMANDS tar -xzf build.tar.gz &&"
-    echo "cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION" /tmp/$POPULATED_FILE_NAME # We don't need to clone twice
+    echo "cp -rfp $(pwd) \$EOS_LOCATION && cd \$EOS_LOCATION" >> /tmp/$POPULATED_FILE_NAME # We don't need to clone twice
+    [[ $TRAVIS != true ]] && echo "tar -xzf build.tar.gz" >> /tmp/$POPULATED_FILE_NAME
     echo "$@" >> /tmp/$POPULATED_FILE_NAME
     echo "cp -rfp \$EOS_LOCATION/build $(pwd)" >> /tmp/$POPULATED_FILE_NAME
-    TEST_COMMANDS="$TEST_COMMANDS ./$POPULATED_FILE_NAME"
+    TEST_COMMANDS="cd $(pwd) && ./$POPULATED_FILE_NAME"
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
     echo "$ docker run $ARGS $FULL_TAG bash -c \"$TEST_COMMANDS\""
