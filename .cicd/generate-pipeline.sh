@@ -170,6 +170,9 @@ cat <<EOF
       PLATFORM_TYPE: "unpinned"
     agents:
       queue: "$BUILDKITE_BUILD_AGENT_QUEUE"
+    plugins:
+      - NorseGaud/modify-checkout-path#v0.0.1:
+          pattern: "EOSIO/eosio?EOSIO/eos"
     timeout: ${TIMEOUT:-180}
     skip: ${SKIP_INSTALL}${SKIP_LINUX}${SKIP_DOCKER}
 
