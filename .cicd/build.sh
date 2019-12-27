@@ -4,7 +4,6 @@ set -eo pipefail
 echo '+++ Build Script Started'
 export DOCKERIZATION=false
 [[ $ENABLE_INSTALL == true ]] && . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD' '<!-- DAC INSTALL' || . ./.cicd/helpers/populate-template-and-hash.sh '<!-- DAC CLONE' '<!-- DAC BUILD'
-sed -i -e '/git clone https:\/\/github.com\/EOSIO\/eos.git/d' /tmp/$POPULATED_FILE_NAME # Avoid cloning a second time
 if [[ "$(uname)" == 'Darwin' ]]; then
     # You can't use chained commands in execute
     if [[ $TRAVIS == true ]]; then
