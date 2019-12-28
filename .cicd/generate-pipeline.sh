@@ -606,6 +606,7 @@ cat <<EOF
     agents:
       - "queue=mac-anka-node-fleet"
     env:
+      IMAGE_TAG: "macos-10.14-$PLATFORM_TYPE"
       PLATFORM_FULL_NAME: ":darwin: macOS 10.14"
     timeout: ${TIMEOUT:-10}
     skip: ${SKIP_MACOS_10_14}${SKIP_PACKAGE_BUILDER}${SKIP_MAC}
