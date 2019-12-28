@@ -1,6 +1,9 @@
 #!/bin/bash
 set -eo pipefail
+
 . ./.cicd/helpers/general.sh
+export DOCKERIZATION=false
+
 
 buildkite-agent artifact download build.tar.gz . --step "$PLATFORM_FULL_NAME - Build"
 
