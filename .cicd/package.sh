@@ -42,7 +42,7 @@ else # Linux
         PACKAGE_TYPE='rpm'
         PACKAGE_COMMANDS="mkdir -p ~/rpmbuild/BUILD && mkdir -p ~/rpmbuild/BUILDROOT && mkdir -p ~/rpmbuild/RPMS && mkdir -p ~/rpmbuild/SOURCES && mkdir -p ~/rpmbuild/SPECS && mkdir -p ~/rpmbuild/SRPMS && yum install -y rpm-build && ./generate_package.sh $PACKAGE_TYPE"
     fi
-    PACKAGE_COMMANDS="./$POPULATED_FILE_NAME && $PRE_COMMANDS && $PACKAGE_COMMANDS"
+    PACKAGE_COMMANDS="cd $(pwd) && ./$POPULATED_FILE_NAME && $PRE_COMMANDS && $PACKAGE_COMMANDS"
     cat /tmp/$POPULATED_FILE_NAME
     mv /tmp/$POPULATED_FILE_NAME ./$POPULATED_FILE_NAME
     echo "docker run $ARGS $FULL_TAG bash -c \"$PACKAGE_COMMANDS\""
